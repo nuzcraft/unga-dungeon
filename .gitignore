@@ -1,0 +1,16 @@
+# Additional files that you can ignore: 
+# - https://github.com/github/gitignore/blob/master/Godot.gitignore
+
+# Godot-specific ignores
+.import/
+.godot/
+
+# Builds/export directory
+builds/**/*
+!builds/.gdignore
+
+# Imported translations (automatically generated from CSV files)
+*.translation
+
+# OSX 
+.DS_Store
