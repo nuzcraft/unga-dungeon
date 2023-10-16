@@ -1,0 +1,14 @@
+[gd_scene load_steps=4 format=3 uid="uid://eq5syp8amlpp"]
+
+[ext_resource type="Script" path="res://scenes/gameplay/gameplay.gd" id="1_jvibj"]
+[ext_resource type="Texture2D" uid="uid://dtwpm3uclaspj" path="res://assets/sprites/icon.png" id="2_t3ssb"]
+[ext_resource type="PackedScene" uid="uid://barl4q1kugrmm" path="res://scenes/gameplay/pause-layer/pause-layer.tscn" id="3_ubd24"]
+
+[node name="Gameplay" type="Node"]
+script = ExtResource("1_jvibj")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(523.993, 298.508)
+texture = ExtResource("2_t3ssb")
+
+[node name="PauseLayer" parent="." instance=ExtResource("3_ubd24")]
