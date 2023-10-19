@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://dyt77ea4dkeyw"]
+[gd_scene load_steps=11 format=3 uid="uid://dyt77ea4dkeyw"]
 
 [ext_resource type="PackedScene" uid="uid://barl4q1kugrmm" path="res://scenes/gameplay/pause-layer/pause-layer.tscn" id="2"]
 [ext_resource type="MeshLibrary" uid="uid://bm778vhamx7bl" path="res://assets/meshlibraries/tilemesh.meshlib" id="2_xhaqi"]
 [ext_resource type="PackedScene" uid="uid://y20neyo1q3yh" path="res://scenes/player/player.tscn" id="3_urib0"]
 [ext_resource type="Script" path="res://scenes/gameplay/gameplay.gd" id="5"]
+[ext_resource type="Shader" path="res://scenes/gameplay/depth-based-edge-detection.gdshader" id="5_4g314"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_oi55u"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -17,6 +18,18 @@ background_mode = 2
 sky = SubResource("Sky_arfe7")
 tonemap_mode = 2
 glow_enabled = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jqevb"]
+render_priority = 0
+shader = ExtResource("5_4g314")
+shader_parameter/edge_threshold = 0.1
+shader_parameter/line_color = Color(1, 1, 1, 1)
+shader_parameter/background_color = Color(0, 0, 0, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_nuvlf"]
+material = SubResource("ShaderMaterial_jqevb")
+flip_faces = true
+size = Vector2(2, 2)
 
 [node name="Gameplay" type="Node3D"]
 script = ExtResource("5")
@@ -49,6 +62,11 @@ metadata/_editor_floor_ = Vector3(0, 0, 0)
 [node name="Player" parent="." instance=ExtResource("3_urib0")]
 
 [node name="PauseLayer" parent="." instance=ExtResource("2")]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6.78731)
+extra_cull_margin = 16384.0
+mesh = SubResource("QuadMesh_nuvlf")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 5, 5)
