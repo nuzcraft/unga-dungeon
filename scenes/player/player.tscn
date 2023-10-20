@@ -2253,9 +2253,6 @@ height = 0.75
 
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_r2idw")
-speed = 2.5
-acceleration = 25.0
-jump_height = 0.5
 
 [node name="character-human2" type="Node3D" parent="."]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
@@ -2263,12 +2260,12 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 
 [node name="root" type="Node3D" parent="character-human2"]
 
 [node name="leg-left" type="MeshInstance3D" parent="character-human2/root"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.083571, 0.17625, -0.02375)
+transform = Transform3D(1, 0, 0, 0, 0.258819, -0.965926, 0, 0.965926, 0.258819, 0.0791, 0.221, -0.0867)
 mesh = SubResource("ArrayMesh_a1dj7")
 skeleton = NodePath("")
 
 [node name="leg-right" type="MeshInstance3D" parent="character-human2/root"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.083571, 0.17625, -0.02375)
+transform = Transform3D(1, 0, 0, 0, 0.707108, 0.707106, 0, -0.707106, 0.707108, -0.0761, 0.22, -0.009)
 mesh = SubResource("ArrayMesh_4ugbo")
 skeleton = NodePath("")
 
@@ -2278,18 +2275,17 @@ mesh = SubResource("ArrayMesh_oxub2")
 skeleton = NodePath("")
 
 [node name="arm-left" type="MeshInstance3D" parent="character-human2/root/torso"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0998968, 0.1115, 0.0115)
+transform = Transform3D(0.965926, -0.258819, 0, 0.258819, 0.965926, 0, 0, 0, 1, 0.0998968, 0.1115, 0.0115)
 mesh = SubResource("ArrayMesh_2jlxv")
 skeleton = NodePath("")
 
 [node name="arm-right" type="MeshInstance3D" parent="character-human2/root/torso"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0998968, 0.1115, 0.0115)
+transform = Transform3D(0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 0, 0, 1, -0.0998968, 0.1115, 0.0115)
 mesh = SubResource("ArrayMesh_xsbq0")
 skeleton = NodePath("")
 
 [node name="head" type="MeshInstance3D" parent="character-human2/root/torso"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.81969e-09, 0.167, 0.0263888)
-cast_shadow = 3
 mesh = SubResource("ArrayMesh_8d57q")
 skeleton = NodePath("")
 
@@ -2301,7 +2297,3 @@ libraries = {
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.375, 0)
 shape = SubResource("CapsuleShape3D_kv1cu")
-
-[node name="Camera" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
-current = true
