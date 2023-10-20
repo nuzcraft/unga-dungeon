@@ -67,12 +67,11 @@ visible = false
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17.301)
-visible = false
 extra_cull_margin = 16384.0
 mesh = SubResource("QuadMesh_nuvlf")
 
 [node name="IsoCamera" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 5, 5)
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 5, 6)
 current = true
 
 [node name="SideCamera" type="Camera3D" parent="."]

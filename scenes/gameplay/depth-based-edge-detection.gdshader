@@ -39,7 +39,7 @@ void fragment() {
 	
 	float depth = linearize_depth(uv, INV_PROJECTION_MATRIX);
 	
-	vec2 offset = 1.0 / VIEWPORT_SIZE;
+	vec2 offset = 0.5 / VIEWPORT_SIZE;
 	
 	float n = linearize_depth(uv + vec2(0.0, -offset.y), INV_PROJECTION_MATRIX);
 	float s = linearize_depth(uv + vec2(0.0, offset.y), INV_PROJECTION_MATRIX);
