@@ -20,5 +20,5 @@ func _on_ExitButton_pressed() -> void:
 			'show_progress_bar': false
 		})
 		await transitions.anim.animation_finished
-		await get_tree().create_timer(0.3).timeout
+		await get_tree().create_timer(0.1).timeout
 	get_tree().quit()
