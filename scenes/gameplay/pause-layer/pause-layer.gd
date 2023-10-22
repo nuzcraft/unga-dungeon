@@ -26,7 +26,7 @@ func _unhandled_input(event):
 
 
 func resume():
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	get_tree().paused = false
 	pause.hide()
 

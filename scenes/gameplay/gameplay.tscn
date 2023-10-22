@@ -1,13 +1,17 @@
-[gd_scene load_steps=11 format=3 uid="uid://dyt77ea4dkeyw"]
+[gd_scene load_steps=15 format=3 uid="uid://dyt77ea4dkeyw"]
 
 [ext_resource type="PackedScene" uid="uid://barl4q1kugrmm" path="res://scenes/gameplay/pause-layer/pause-layer.tscn" id="2"]
 [ext_resource type="MeshLibrary" uid="uid://bm778vhamx7bl" path="res://assets/meshlibraries/tilemesh.meshlib" id="2_xhaqi"]
 [ext_resource type="PackedScene" uid="uid://y20neyo1q3yh" path="res://scenes/player/player.tscn" id="3_urib0"]
 [ext_resource type="Script" path="res://scenes/gameplay/gameplay.gd" id="5"]
 [ext_resource type="Shader" path="res://scenes/gameplay/depth-based-edge-detection.gdshader" id="5_4g314"]
+[ext_resource type="Shader" path="res://scenes/gameplay/normal-based-edge-detection.gdshader.gdshader" id="6_5kpi6"]
+[ext_resource type="ButtonGroup" uid="uid://c5gisxvhyko7o" path="res://shader_button_group.tres" id="7_siv8a"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_oi55u"]
+sky_top_color = Color(0.384314, 0.454902, 0.54902, 1)
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_bottom_color = Color(0.384314, 0.454902, 0.54902, 1)
 ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
 
 [sub_resource type="Sky" id="Sky_arfe7"]
@@ -26,8 +30,20 @@ shader_parameter/edge_threshold = 0.1
 shader_parameter/line_color = Color(1, 1, 1, 1)
 shader_parameter/background_color = Color(0, 0, 0, 1)
 
-[sub_resource type="QuadMesh" id="QuadMesh_nuvlf"]
+[sub_resource type="QuadMesh" id="QuadMesh_8kkb1"]
 material = SubResource("ShaderMaterial_jqevb")
+flip_faces = true
+size = Vector2(2, 2)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1gku2"]
+render_priority = 0
+shader = ExtResource("6_5kpi6")
+shader_parameter/edge_threshold = 0.5
+shader_parameter/line_color = Color(0.043, 0.282, 0.467, 1)
+shader_parameter/background_color = Color(0.408, 0.969, 0.694, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_jaoep"]
+material = SubResource("ShaderMaterial_1gku2")
 flip_faces = true
 size = Vector2(2, 2)
 
@@ -55,7 +71,7 @@ mesh_library = ExtResource("2_xhaqi")
 cell_size = Vector3(1, 1, 1)
 cell_center_y = false
 data = {
-"cells": PackedInt32Array(65533, 65533, 0, 65533, 65534, 0, 65533, 65535, 655370, 65533, 0, 0, 65533, 1, 1, 65533, 2, 6, 65534, 2, 655370, 65535, 2, 1, 0, 2, 0, 1, 2, 1, 1, 1, 0, 2, 2, 5, 2, 1, 0, 2, 0, 0, 2, 65535, 0, 2, 65534, 0, 2, 65533, 0, 1, 65533, 0, 0, 65533, 0, 65535, 65533, 0, 65534, 65533, 1, 65534, 65534, 0, 65534, 65535, 1, 65535, 65534, 0, 0, 65534, 0, 1, 65534, 1, 1, 65535, 0, 1, 0, 1, 0, 0, 0, 0, 65535, 0, 65535, 65535, 0, 65535, 0, 0, 65534, 0, 0, 65534, 1, 1, 65535, 1, 0, 0, 1, 0, 65533, 65532, 655377, 65534, 65532, 1048580, 65535, 65532, 0, 0, 65532, 0, 1, 65532, 0, 2, 65532, 0, 3, 65532, 655376, 3, 65533, 655376, 3, 65534, 0, 3, 65535, 6, 3, 0, 6, 3, 1, 0, 3, 2, 0, 3, 3, 0, 2, 3, 0, 1, 3, 0, 0, 3, 0, 65535, 3, 0, 65534, 3, 0, 65533, 3, 0, 65532, 3, 0, 65532, 2, 655376, 65532, 1, 5, 65532, 0, 0, 65532, 65535, 0, 65532, 65534, 0, 65532, 65533, 655376, 65532, 65532, 7, 4, 4, 2, 4, 3, 2, 4, 2, 2, 4, 1, 2, 4, 0, 2, 4, 65535, 2, 4, 65534, 2, 4, 65533, 2, 4, 65532, 2, 4, 65531, 2, 3, 65531, 2, 2, 65531, 2, 1, 65531, 2, 0, 65531, 2, 65535, 65531, 2, 65534, 65531, 2, 65533, 65531, 3, 65532, 65531, 3, 65531, 65531, 3, 65531, 65532, 3, 65531, 65533, 2, 65531, 65534, 2, 65531, 65535, 2, 65531, 0, 2, 65531, 1, 2, 65531, 2, 2, 65531, 3, 2, 65531, 4, 2, 65538, 65533, 655377)
+"cells": PackedInt32Array(65533, 65533, 0, 65533, 65534, 0, 65533, 65535, 655370, 65533, 0, 0, 65533, 1, 1, 65533, 2, 6, 65534, 2, 655370, 65535, 2, 1, 0, 2, 0, 1, 2, 1, 1, 1, 0, 2, 2, 5, 2, 1, 0, 2, 0, 0, 2, 65535, 0, 2, 65534, 0, 2, 65533, 0, 1, 65533, 0, 0, 65533, 0, 65535, 65533, 0, 65534, 65533, 1, 65534, 65534, 0, 65534, 65535, 1, 65535, 65534, 0, 0, 65534, 0, 1, 65534, 1, 1, 65535, 0, 1, 0, 1, 0, 0, 0, 0, 65535, 0, 65535, 65535, 0, 65535, 0, 0, 65534, 0, 0, 65534, 1, 1, 65535, 1, 0, 0, 1, 0, 65533, 65532, 655377, 65534, 65532, 1048580, 65535, 65532, 0, 0, 65532, 0, 1, 65532, 0, 2, 65532, 0, 3, 65532, 655376, 3, 65533, 655376, 3, 65534, 0, 3, 65535, 6, 3, 0, 6, 3, 1, 1441796, 3, 2, 16, 3, 3, 10, 2, 3, 0, 1, 3, 0, 0, 3, 0, 65535, 3, 0, 65534, 3, 0, 65533, 3, 0, 65532, 3, 655372, 65532, 2, 655376, 65532, 1, 5, 65532, 0, 0, 65532, 65535, 0, 65532, 65534, 0, 65532, 65533, 655376, 65532, 65532, 7, 4, 4, 2, 4, 3, 2, 4, 2, 2, 4, 1, 2, 4, 0, 2, 4, 65535, 2, 4, 65534, 2, 4, 65533, 2, 4, 65532, 2, 4, 65531, 2, 3, 65531, 2, 2, 65531, 2, 1, 65531, 2, 0, 65531, 2, 65535, 65531, 2, 65534, 65531, 2, 65533, 65531, 3, 65532, 65531, 3, 65531, 65531, 3, 65531, 65532, 3, 65531, 65533, 2, 65531, 65534, 2, 65531, 65535, 2, 65531, 0, 2, 65531, 1, 2, 65531, 2, 2, 65531, 3, 2, 65531, 4, 2, 65538, 65533, 655377, 65533, 4, 5, 2, 4, 1441798, 65535, 4, 655361, 0, 4, 655361)
 }
 metadata/_editor_floor_ = Vector3(0, 0, 0)
 
@@ -63,12 +79,12 @@ metadata/_editor_floor_ = Vector3(0, 0, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.153692, 0.277244, 0.410503)
 
 [node name="PauseLayer" parent="." instance=ExtResource("2")]
+
+[node name="Label" parent="PauseLayer" index="0"]
 visible = false
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17.301)
-extra_cull_margin = 16384.0
-mesh = SubResource("QuadMesh_nuvlf")
+[node name="PauseButton" parent="PauseLayer" index="1"]
+visible = false
 
 [node name="IsoCamera" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 5, 6)
@@ -78,3 +94,83 @@ current = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00937247, 1.92055, 10.1058)
 projection = 1
 size = 6.0
+
+[node name="Shaders" type="Node" parent="."]
+
+[node name="DepthSobelShader" type="MeshInstance3D" parent="Shaders"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17.301)
+visible = false
+extra_cull_margin = 16384.0
+mesh = SubResource("QuadMesh_8kkb1")
+skeleton = NodePath("../..")
+
+[node name="NormalSobelShader" type="MeshInstance3D" parent="Shaders"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17.301)
+extra_cull_margin = 16384.0
+mesh = SubResource("QuadMesh_jaoep")
+skeleton = NodePath("../..")
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="PanelContainer" type="PanelContainer" parent="UI"]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="NoShaderSelector" type="CheckButton" parent="UI/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+button_group = ExtResource("7_siv8a")
+text = "No Screenspace Shader"
+
+[node name="DepthSobelShaderSelector" type="CheckButton" parent="UI/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+button_pressed = true
+button_group = ExtResource("7_siv8a")
+text = "Depth Sobel Shader"
+
+[node name="NormalSobelShaderSelector" type="CheckButton" parent="UI/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+button_group = ExtResource("7_siv8a")
+text = "Normal Sobel Shader"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="CameraLabel" type="Label" parent="UI/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Camera"
+
+[node name="CameraOptionButton" type="OptionButton" parent="UI/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+item_count = 2
+selected = 0
+popup/item_0/text = "Isometric"
+popup/item_0/id = 0
+popup/item_1/text = "Side View"
+popup/item_1/id = 1
+
+[node name="ReloadScene" type="Button" parent="UI/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Reload Scene"
+
+[node name="PressU" type="Label" parent="UI/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Press U to show/hide UI"
+horizontal_alignment = 1
+
+[connection signal="toggled" from="UI/PanelContainer/MarginContainer/VBoxContainer/NoShaderSelector" to="." method="_on_no_shader_selector_toggled"]
+[connection signal="toggled" from="UI/PanelContainer/MarginContainer/VBoxContainer/DepthSobelShaderSelector" to="." method="_on_depth_sobel_shader_selector_toggled"]
+[connection signal="toggled" from="UI/PanelContainer/MarginContainer/VBoxContainer/NormalSobelShaderSelector" to="." method="_on_normal_sobel_shader_selector_toggled"]
+[connection signal="item_selected" from="UI/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/CameraOptionButton" to="." method="_on_camera_option_button_item_selected"]
+[connection signal="pressed" from="UI/PanelContainer/MarginContainer/VBoxContainer/ReloadScene" to="." method="_on_restart_scene_pressed"]
+
+[editable path="PauseLayer"]

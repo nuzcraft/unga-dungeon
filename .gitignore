@@ -4,6 +4,7 @@
 # Godot-specific ignores
 .import/
 .godot/
+*.import
 
 # Builds/export directory
 builds/**/*
