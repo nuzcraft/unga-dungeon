@@ -9,7 +9,9 @@
 [ext_resource type="ButtonGroup" uid="uid://c5gisxvhyko7o" path="res://shader_button_group.tres" id="7_siv8a"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_oi55u"]
+sky_top_color = Color(0.384314, 0.454902, 0.54902, 1)
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_bottom_color = Color(0.384314, 0.454902, 0.54902, 1)
 ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
 
 [sub_resource type="Sky" id="Sky_arfe7"]
@@ -36,7 +38,7 @@ size = Vector2(2, 2)
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_1gku2"]
 render_priority = 0
 shader = ExtResource("6_5kpi6")
-shader_parameter/edge_threshold = 0.1
+shader_parameter/edge_threshold = 0.5
 shader_parameter/line_color = Color(0.043, 0.282, 0.467, 1)
 shader_parameter/background_color = Color(0.408, 0.969, 0.694, 1)
 
@@ -97,13 +99,13 @@ size = 6.0
 
 [node name="DepthSobelShader" type="MeshInstance3D" parent="Shaders"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17.301)
+visible = false
 extra_cull_margin = 16384.0
 mesh = SubResource("QuadMesh_8kkb1")
 skeleton = NodePath("../..")
 
 [node name="NormalSobelShader" type="MeshInstance3D" parent="Shaders"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17.301)
-visible = false
 extra_cull_margin = 16384.0
 mesh = SubResource("QuadMesh_jaoep")
 skeleton = NodePath("../..")
@@ -159,6 +161,11 @@ popup/item_1/id = 1
 [node name="ReloadScene" type="Button" parent="UI/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Reload Scene"
+
+[node name="PressU" type="Label" parent="UI/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Press U to show/hide UI"
+horizontal_alignment = 1
 
 [connection signal="toggled" from="UI/PanelContainer/MarginContainer/VBoxContainer/NoShaderSelector" to="." method="_on_no_shader_selector_toggled"]
 [connection signal="toggled" from="UI/PanelContainer/MarginContainer/VBoxContainer/DepthSobelShaderSelector" to="." method="_on_depth_sobel_shader_selector_toggled"]

@@ -1,10 +1,10 @@
 shader_type spatial;
-render_mode specular_toon;
+render_mode unshaded;
 
 uniform sampler2D SCREEN_TEXTURE: hint_screen_texture, filter_linear_mipmap;
-uniform sampler2D NORMAL_TEXTURE : hint_normal_roughness_texture, filter_nearest;
+uniform sampler2D NORMAL_TEXTURE : hint_normal_roughness_texture, filter_linear_mipmap;
 
-uniform float edge_threshold = 0.1;
+uniform float edge_threshold = 0.5;
 uniform vec3 line_color: source_color = vec3(0.043, 0.282, 0.467);
 uniform vec3 background_color: source_color = vec3(0.408, 0.969, 0.694);
 
@@ -28,7 +28,8 @@ void fragment() {
 	vec2 uv = SCREEN_UV;
 	vec4 screen_color = texture(SCREEN_TEXTURE, uv);
 	vec3 normal = texture(NORMAL_TEXTURE, uv).rgb;
-	vec2 offset = 1.0 / VIEWPORT_SIZE;
+	normal = normal * 2.0 - 1.0;
+	vec2 offset = 0.5 / VIEWPORT_SIZE;
 	
 	vec3 n = texture(NORMAL_TEXTURE, uv + vec2(0.0, -offset.y)).rgb;
 	vec3 s = texture(NORMAL_TEXTURE, uv + vec2(0.0, offset.y)).rgb;
@@ -40,9 +41,9 @@ void fragment() {
 	vec3 se = texture(NORMAL_TEXTURE, uv + vec2(offset.x, offset.y)).rgb;
 	
 	mat3 surrounding_pixels = mat3(
-		vec3(length(nw), length(n), length(ne)),
-		vec3(length(w), length(normal), length(e)),
-		vec3(length(sw), length(s), length(se))
+		vec3(length(nw-normal), length(n-normal), length(ne-normal)),
+		vec3(length(w-normal), length(normal-normal), length(e-normal)),
+		vec3(length(sw-normal), length(s-normal), length(se-normal))
 	);
 	
 	float edge_x = dot(sobel_x[0], surrounding_pixels[0]) + dot(sobel_x[1], surrounding_pixels[1]) + dot(sobel_x[2], surrounding_pixels[2]);

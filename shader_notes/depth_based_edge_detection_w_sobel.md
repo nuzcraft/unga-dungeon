@@ -89,13 +89,13 @@ void fragment() {
 
 ## Screenshots
 
-![Isometric view](screenshots/001_iso_dungeon.png)
+![Isometric view](../screenshots/001_iso_dungeon.png)
 
-![Isometric view w/ Edge Detection](screenshots/003_iso_depth_sobel.png)
+![Isometric view w/ Edge Detection](../screenshots/003_iso_depth_sobel.png)
 
-![Orthographic view](screenshots/002_ortho_dungeon.png)
+![Orthographic view](../screenshots/002_ortho_dungeon.png)
 
-![Orthographic view w/ Edge Detection](screenshots/004_ortho_depth_sobel.png)
+![Orthographic view w/ Edge Detection](../screenshots/004_ortho_depth_sobel.png)
 
 ## Breakdown
 
