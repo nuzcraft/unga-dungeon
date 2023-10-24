@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://dyt77ea4dkeyw"]
+[gd_scene load_steps=19 format=3 uid="uid://dyt77ea4dkeyw"]
 
 [ext_resource type="PackedScene" uid="uid://barl4q1kugrmm" path="res://scenes/gameplay/pause-layer/pause-layer.tscn" id="2"]
 [ext_resource type="MeshLibrary" uid="uid://bm778vhamx7bl" path="res://assets/meshlibraries/tilemesh.meshlib" id="2_xhaqi"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://scenes/gameplay/gameplay.gd" id="5"]
 [ext_resource type="Shader" path="res://scenes/gameplay/depth-based-edge-detection.gdshader" id="5_4g314"]
 [ext_resource type="Shader" path="res://scenes/gameplay/normal-based-edge-detection.gdshader.gdshader" id="6_5kpi6"]
+[ext_resource type="Shader" path="res://scenes/gameplay/moebius.gdshader" id="7_eadat"]
 [ext_resource type="ButtonGroup" uid="uid://c5gisxvhyko7o" path="res://shader_button_group.tres" id="7_siv8a"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_oi55u"]
@@ -46,6 +47,19 @@ shader_parameter/background_color = Color(0.408, 0.969, 0.694, 1)
 material = SubResource("ShaderMaterial_1gku2")
 flip_faces = true
 size = Vector2(2, 2)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_aa465"]
+noise_type = 0
+frequency = 0.03
+fractal_gain = 0.3
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_2315w"]
+noise = SubResource("FastNoiseLite_aa465")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p4oe8"]
+shader = ExtResource("7_eadat")
+shader_parameter/strength = 1.5
+shader_parameter/NOISE_TEXTURE = SubResource("NoiseTexture2D_2315w")
 
 [node name="Gameplay" type="Node3D"]
 script = ExtResource("5")
@@ -106,9 +120,20 @@ skeleton = NodePath("../..")
 
 [node name="NormalSobelShader" type="MeshInstance3D" parent="Shaders"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17.301)
+visible = false
 extra_cull_margin = 16384.0
 mesh = SubResource("QuadMesh_jaoep")
 skeleton = NodePath("../..")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="Shaders"]
+
+[node name="ColorRect" type="ColorRect" parent="Shaders/CanvasLayer"]
+material = SubResource("ShaderMaterial_p4oe8")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="UI" type="CanvasLayer" parent="."]
 
