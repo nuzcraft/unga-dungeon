@@ -5,6 +5,8 @@ extends Node
 
 @onready var depth_sobel_shader = $Shaders/DepthSobelShader
 @onready var normal_sobel_shader = $Shaders/NormalSobelShader
+@onready var noise_overlay_shader = $Shaders/NoiseOverlayShader
+@onready var noise_overlay_shader_layer = $Shaders/NoiseOverlayShaderLayer
 
 @onready var ui = $UI
 
@@ -60,3 +62,15 @@ func _on_no_shader_selector_toggled(button_pressed):
 	if button_pressed:
 		depth_sobel_shader.hide()
 		normal_sobel_shader.hide()
+
+func _on_noise_overlay_canvas_shader_toggled(button_pressed):
+	if button_pressed:
+		noise_overlay_shader_layer.show()
+	else:
+		noise_overlay_shader_layer.hide()
+
+func _on_noise_overlay_spatial_shader_toggled(button_pressed):
+	if button_pressed:
+		noise_overlay_shader.show()
+	else:
+		noise_overlay_shader.hide()

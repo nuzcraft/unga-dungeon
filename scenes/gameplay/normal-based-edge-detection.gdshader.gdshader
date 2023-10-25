@@ -27,18 +27,18 @@ void vertex(){
 void fragment() {
 	vec2 uv = SCREEN_UV;
 	vec4 screen_color = texture(SCREEN_TEXTURE, uv);
-	vec3 normal = texture(NORMAL_TEXTURE, uv).rgb;
+	vec3 normal = normalize(texture(NORMAL_TEXTURE, uv).rgb);
 	normal = normal * 2.0 - 1.0;
 	vec2 offset = 0.5 / VIEWPORT_SIZE;
 	
-	vec3 n = texture(NORMAL_TEXTURE, uv + vec2(0.0, -offset.y)).rgb;
-	vec3 s = texture(NORMAL_TEXTURE, uv + vec2(0.0, offset.y)).rgb;
-	vec3 e = texture(NORMAL_TEXTURE, uv + vec2(offset.x, 0.0)).rgb;
-	vec3 w = texture(NORMAL_TEXTURE, uv + vec2(-offset.x, 0.0)).rgb;
-	vec3 nw = texture(NORMAL_TEXTURE, uv + vec2(-offset.x, -offset.y)).rgb;
-	vec3 ne = texture(NORMAL_TEXTURE, uv + vec2(offset.x, -offset.y)).rgb;
-	vec3 sw = texture(NORMAL_TEXTURE, uv + vec2(-offset.x, offset.y)).rgb;
-	vec3 se = texture(NORMAL_TEXTURE, uv + vec2(offset.x, offset.y)).rgb;
+	vec3 n = normalize(texture(NORMAL_TEXTURE, uv + vec2(0.0, -offset.y)).rgb);
+	vec3 s = normalize(texture(NORMAL_TEXTURE, uv + vec2(0.0, offset.y)).rgb);
+	vec3 e = normalize(texture(NORMAL_TEXTURE, uv + vec2(offset.x, 0.0)).rgb);
+	vec3 w = normalize(texture(NORMAL_TEXTURE, uv + vec2(-offset.x, 0.0)).rgb);
+	vec3 nw = normalize(texture(NORMAL_TEXTURE, uv + vec2(-offset.x, -offset.y))).rgb;
+	vec3 ne = normalize(texture(NORMAL_TEXTURE, uv + vec2(offset.x, -offset.y))).rgb;
+	vec3 sw = normalize(texture(NORMAL_TEXTURE, uv + vec2(-offset.x, offset.y)).rgb);
+	vec3 se = normalize(texture(NORMAL_TEXTURE, uv + vec2(offset.x, offset.y)).rgb);
 	
 	mat3 surrounding_pixels = mat3(
 		vec3(length(nw-normal), length(n-normal), length(ne-normal)),
