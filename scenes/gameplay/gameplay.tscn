@@ -9,7 +9,7 @@
 [ext_resource type="Shader" path="res://scenes/gameplay/noise-overlay-spatial.gdshader" id="7_jlsjr"]
 [ext_resource type="ButtonGroup" uid="uid://c5gisxvhyko7o" path="res://shader_button_group.tres" id="7_siv8a"]
 [ext_resource type="Shader" path="res://scenes/gameplay/noise-overlay.gdshader" id="7_vcbxo"]
-[ext_resource type="Texture2D" uid="uid://bj4qxkfo15kpe" path="res://assets/blue_noise.png" id="8_d0fdh"]
+[ext_resource type="Texture2D" uid="uid://dvifkx546vhhy" path="res://assets/blue_noise.png" id="8_d0fdh"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_oi55u"]
 sky_top_color = Color(0.384314, 0.454902, 0.54902, 1)
@@ -132,7 +132,6 @@ mesh = SubResource("QuadMesh_jaoep")
 skeleton = NodePath("../..")
 
 [node name="NoiseOverlayShader" type="MeshInstance3D" parent="Shaders"]
-visible = false
 mesh = SubResource("QuadMesh_u1pn0")
 
 [node name="NoiseOverlayShaderLayer" type="CanvasLayer" parent="Shaders"]
