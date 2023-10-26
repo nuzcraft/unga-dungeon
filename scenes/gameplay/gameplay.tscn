@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://dyt77ea4dkeyw"]
+[gd_scene load_steps=21 format=3 uid="uid://dc7dwo57b8a4a"]
 
 [ext_resource type="PackedScene" uid="uid://barl4q1kugrmm" path="res://scenes/gameplay/pause-layer/pause-layer.tscn" id="2"]
 [ext_resource type="MeshLibrary" uid="uid://bm778vhamx7bl" path="res://assets/meshlibraries/tilemesh.meshlib" id="2_xhaqi"]
@@ -6,7 +6,10 @@
 [ext_resource type="Script" path="res://scenes/gameplay/gameplay.gd" id="5"]
 [ext_resource type="Shader" path="res://scenes/gameplay/depth-based-edge-detection.gdshader" id="5_4g314"]
 [ext_resource type="Shader" path="res://scenes/gameplay/normal-based-edge-detection.gdshader.gdshader" id="6_5kpi6"]
+[ext_resource type="Shader" path="res://scenes/gameplay/noise-overlay-spatial.gdshader" id="7_jlsjr"]
 [ext_resource type="ButtonGroup" uid="uid://c5gisxvhyko7o" path="res://shader_button_group.tres" id="7_siv8a"]
+[ext_resource type="Shader" path="res://scenes/gameplay/noise-overlay.gdshader" id="7_vcbxo"]
+[ext_resource type="Texture2D" uid="uid://bj4qxkfo15kpe" path="res://assets/blue_noise.png" id="8_d0fdh"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_oi55u"]
 sky_top_color = Color(0.384314, 0.454902, 0.54902, 1)
@@ -39,13 +42,33 @@ size = Vector2(2, 2)
 render_priority = 0
 shader = ExtResource("6_5kpi6")
 shader_parameter/edge_threshold = 0.5
-shader_parameter/line_color = Color(0.043, 0.282, 0.467, 1)
-shader_parameter/background_color = Color(0.408, 0.969, 0.694, 1)
+shader_parameter/line_color = Color(0.901961, 1, 0.92549, 1)
+shader_parameter/background_color = Color(0.411765, 0.376471, 0.419608, 1)
 
 [sub_resource type="QuadMesh" id="QuadMesh_jaoep"]
 material = SubResource("ShaderMaterial_1gku2")
 flip_faces = true
 size = Vector2(2, 2)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wfc7k"]
+render_priority = 0
+shader = ExtResource("7_jlsjr")
+shader_parameter/strength = 1.0
+shader_parameter/uv_scaling = 1.0
+shader_parameter/NOISE_TEXTURE = ExtResource("8_d0fdh")
+
+[sub_resource type="QuadMesh" id="QuadMesh_u1pn0"]
+material = SubResource("ShaderMaterial_wfc7k")
+flip_faces = true
+size = Vector2(2, 2)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p4oe8"]
+shader = ExtResource("7_vcbxo")
+shader_parameter/strength = 5.0
+shader_parameter/uv_scaling = 0.3
+shader_parameter/movement_direction = Vector2(-0.25, 0.25)
+shader_parameter/movement_speed = 0.01
+shader_parameter/NOISE_TEXTURE = ExtResource("8_d0fdh")
 
 [node name="Gameplay" type="Node3D"]
 script = ExtResource("5")
@@ -110,6 +133,20 @@ extra_cull_margin = 16384.0
 mesh = SubResource("QuadMesh_jaoep")
 skeleton = NodePath("../..")
 
+[node name="NoiseOverlayShader" type="MeshInstance3D" parent="Shaders"]
+visible = false
+mesh = SubResource("QuadMesh_u1pn0")
+
+[node name="NoiseOverlayShaderLayer" type="CanvasLayer" parent="Shaders"]
+
+[node name="NoiseOverlayShader" type="ColorRect" parent="Shaders/NoiseOverlayShaderLayer"]
+material = SubResource("ShaderMaterial_p4oe8")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="PanelContainer" type="PanelContainer" parent="UI"]
@@ -142,6 +179,17 @@ layout_mode = 2
 button_group = ExtResource("7_siv8a")
 text = "Normal Sobel Shader"
 
+[node name="NoiseOverlaySpatialShader" type="CheckButton" parent="UI/PanelContainer/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+button_group = ExtResource("7_siv8a")
+text = "Noise Overlay
+Spatial Shader"
+
+[node name="NoiseOverlayCanvasShader" type="CheckButton" parent="UI/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Noise Overlay Shader"
+
 [node name="HBoxContainer" type="HBoxContainer" parent="UI/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
@@ -170,6 +218,8 @@ horizontal_alignment = 1
 [connection signal="toggled" from="UI/PanelContainer/MarginContainer/VBoxContainer/NoShaderSelector" to="." method="_on_no_shader_selector_toggled"]
 [connection signal="toggled" from="UI/PanelContainer/MarginContainer/VBoxContainer/DepthSobelShaderSelector" to="." method="_on_depth_sobel_shader_selector_toggled"]
 [connection signal="toggled" from="UI/PanelContainer/MarginContainer/VBoxContainer/NormalSobelShaderSelector" to="." method="_on_normal_sobel_shader_selector_toggled"]
+[connection signal="toggled" from="UI/PanelContainer/MarginContainer/VBoxContainer/NoiseOverlaySpatialShader" to="." method="_on_noise_overlay_spatial_shader_toggled"]
+[connection signal="toggled" from="UI/PanelContainer/MarginContainer/VBoxContainer/NoiseOverlayCanvasShader" to="." method="_on_noise_overlay_canvas_shader_toggled"]
 [connection signal="item_selected" from="UI/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/CameraOptionButton" to="." method="_on_camera_option_button_item_selected"]
 [connection signal="pressed" from="UI/PanelContainer/MarginContainer/VBoxContainer/ReloadScene" to="." method="_on_restart_scene_pressed"]
 
