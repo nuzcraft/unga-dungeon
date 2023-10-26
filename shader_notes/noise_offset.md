@@ -92,4 +92,4 @@ void fragment() {
   - calculate the SCREEN_PIXEL_SIZE based on the VIEWPORT_SIZE
   - most everything else stays the same
 
-Sprites from Kenney: [kenny.nl](kenney.nl)
+Sprites and Models from Kenney: [kenny.nl](kenney.nl)
