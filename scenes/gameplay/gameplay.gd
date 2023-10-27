@@ -7,6 +7,7 @@ extends Node
 @onready var normal_sobel_shader = $Shaders/NormalSobelShader
 @onready var noise_overlay_shader = $Shaders/NoiseOverlayShader
 @onready var noise_overlay_shader_layer = $Shaders/NoiseOverlayShaderLayer
+@onready var combined_sobel_shader = $Shaders/CombinedSobelShader
 
 @onready var ui = $UI
 
@@ -74,3 +75,9 @@ func _on_noise_overlay_spatial_shader_toggled(button_pressed):
 		noise_overlay_shader.show()
 	else:
 		noise_overlay_shader.hide()
+
+func _on_combined_sobel_shader_toggled(button_pressed):
+	if button_pressed:
+		combined_sobel_shader.show()
+	else:
+		combined_sobel_shader.hide()
