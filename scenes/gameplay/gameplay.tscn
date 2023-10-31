@@ -1,9 +1,10 @@
-[gd_scene load_steps=30 format=3 uid="uid://dc7dwo57b8a4a"]
+[gd_scene load_steps=32 format=3 uid="uid://dc7dwo57b8a4a"]
 
 [ext_resource type="PackedScene" uid="uid://barl4q1kugrmm" path="res://scenes/gameplay/pause-layer/pause-layer.tscn" id="2"]
 [ext_resource type="MeshLibrary" uid="uid://bm778vhamx7bl" path="res://assets/meshlibraries/tilemesh.meshlib" id="2_xhaqi"]
 [ext_resource type="PackedScene" uid="uid://y20neyo1q3yh" path="res://scenes/player/player.tscn" id="3_urib0"]
 [ext_resource type="Script" path="res://scenes/gameplay/gameplay.gd" id="5"]
+[ext_resource type="Texture2D" uid="uid://gwhij3eha8ge" path="res://assets/001_iso_dungeon.png" id="5_3d03j"]
 [ext_resource type="Shader" path="res://scenes/gameplay/depth-based-edge-detection.gdshader" id="5_4g314"]
 [ext_resource type="Shader" path="res://scenes/gameplay/normal-based-edge-detection.gdshader.gdshader" id="6_5kpi6"]
 [ext_resource type="Shader" path="res://scenes/gameplay/combined_edge_detection.gdshader" id="7_7ydwy"]
@@ -11,10 +12,10 @@
 [ext_resource type="ButtonGroup" uid="uid://c5gisxvhyko7o" path="res://shader_button_group.tres" id="7_siv8a"]
 [ext_resource type="Shader" path="res://scenes/gameplay/noise-overlay.gdshader" id="7_vcbxo"]
 [ext_resource type="Texture2D" uid="uid://bj4qxkfo15kpe" path="res://assets/blue_noise.png" id="8_d0fdh"]
-[ext_resource type="Texture2D" uid="uid://bwt70psuf4imw" path="res://assets/cross_hatch-B.png" id="9_sje42"]
-[ext_resource type="Texture2D" uid="uid://b3tfxy061f7ep" path="res://assets/cross_hatch-G.png" id="10_sfgw5"]
-[ext_resource type="Texture2D" uid="uid://bpkd1r6ucdjo8" path="res://assets/cross_hatch-R.png" id="11_bfm6h"]
 [ext_resource type="Shader" path="res://scenes/gameplay/shadow_hatching.gdshader" id="11_vcdlo"]
+[ext_resource type="Texture2D" uid="uid://b7vfcf4xs8ouh" path="res://assets/color-textures/1bit-monitor-glow-1x.png" id="14_ne521"]
+[ext_resource type="Shader" path="res://scenes/gameplay/dither_gradient.gdshader" id="15_c1hg0"]
+[ext_resource type="Texture2D" uid="uid://cxr47kdoh5rld" path="res://assets/dither-textures/LDR_LLL1_0.png" id="15_q0jpy"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_oi55u"]
 sky_top_color = Color(0.384314, 0.454902, 0.54902, 1)
@@ -72,9 +73,6 @@ size = Vector2(2, 2)
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_napyh"]
 render_priority = 0
 shader = ExtResource("11_vcdlo")
-shader_parameter/HATCH_TEXTURE_R = ExtResource("11_bfm6h")
-shader_parameter/HATCH_TEXTURE_G = ExtResource("10_sfgw5")
-shader_parameter/HATCH_TEXTURE_B = ExtResource("9_sje42")
 
 [sub_resource type="QuadMesh" id="QuadMesh_jaq1h"]
 material = SubResource("ShaderMaterial_napyh")
@@ -100,6 +98,15 @@ shader_parameter/uv_scaling = 0.3
 shader_parameter/movement_direction = Vector2(-0.25, 0.25)
 shader_parameter/movement_speed = 0.01
 shader_parameter/NOISE_TEXTURE = ExtResource("8_d0fdh")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4hg55"]
+shader = ExtResource("15_c1hg0")
+shader_parameter/dither_size = 1.0
+shader_parameter/u_contrast = 1.0
+shader_parameter/u_offset = 0.0
+shader_parameter/bit_depth = 5
+shader_parameter/dither_tex = ExtResource("15_q0jpy")
+shader_parameter/color_tex = ExtResource("14_ne521")
 
 [node name="Gameplay" type="Node3D"]
 script = ExtResource("5")
@@ -140,6 +147,16 @@ visible = false
 [node name="PauseButton" parent="PauseLayer" index="1"]
 visible = false
 
+[node name="TextureRect" type="TextureRect" parent="PauseLayer"]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_3d03j")
+expand_mode = 2
+
 [node name="IsoCamera" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 5, 6)
 current = true
@@ -169,12 +186,12 @@ skeleton = NodePath("../..")
 
 [node name="CombinedSobelShader" type="MeshInstance3D" parent="Shaders"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6.28541)
-visible = false
 cast_shadow = 0
 extra_cull_margin = 16384.0
 mesh = SubResource("QuadMesh_jmv7u")
 
 [node name="ShadowHatchShader" type="MeshInstance3D" parent="Shaders"]
+visible = false
 cast_shadow = 0
 extra_cull_margin = 16384.0
 mesh = SubResource("QuadMesh_jaq1h")
@@ -188,6 +205,16 @@ visible = false
 
 [node name="NoiseOverlayShader" type="ColorRect" parent="Shaders/NoiseOverlayShaderLayer"]
 material = SubResource("ShaderMaterial_p4oe8")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DitherGradientShaderLayer" type="CanvasLayer" parent="Shaders"]
+
+[node name="DitherGradientShader" type="ColorRect" parent="Shaders/DitherGradientShaderLayer"]
+material = SubResource("ShaderMaterial_4hg55")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
