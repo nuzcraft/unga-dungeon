@@ -8,6 +8,8 @@ extends Node
 @onready var noise_overlay_shader = $Shaders/NoiseOverlayShader
 @onready var noise_overlay_shader_layer = $Shaders/NoiseOverlayShaderLayer
 @onready var combined_sobel_shader = $Shaders/CombinedSobelShader
+@onready var cross_hatch_shader = $Shaders/ShadowHatchShader
+@onready var dither_gradient_shader_layer = $Shaders/DitherGradientShaderLayer
 
 @onready var ui = $UI
 
@@ -81,3 +83,15 @@ func _on_combined_sobel_shader_toggled(button_pressed):
 		combined_sobel_shader.show()
 	else:
 		combined_sobel_shader.hide()
+
+func _on_cross_hatch_shader_toggled(button_pressed):
+	if button_pressed:
+		cross_hatch_shader.show()
+	else:
+		cross_hatch_shader.hide()
+
+func _on_dither_gradient_shader_toggled(button_pressed):
+	if button_pressed:
+		dither_gradient_shader_layer.show()
+	else:
+		dither_gradient_shader_layer.hide()

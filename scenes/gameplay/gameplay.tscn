@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://dc7dwo57b8a4a"]
+[gd_scene load_steps=36 format=3 uid="uid://dc7dwo57b8a4a"]
 
 [ext_resource type="PackedScene" uid="uid://barl4q1kugrmm" path="res://scenes/gameplay/pause-layer/pause-layer.tscn" id="2"]
 [ext_resource type="MeshLibrary" uid="uid://bm778vhamx7bl" path="res://assets/meshlibraries/tilemesh.meshlib" id="2_xhaqi"]
@@ -12,7 +12,10 @@
 [ext_resource type="ButtonGroup" uid="uid://c5gisxvhyko7o" path="res://shader_button_group.tres" id="7_siv8a"]
 [ext_resource type="Shader" path="res://scenes/gameplay/noise-overlay.gdshader" id="7_vcbxo"]
 [ext_resource type="Texture2D" uid="uid://bj4qxkfo15kpe" path="res://assets/blue_noise.png" id="8_d0fdh"]
+[ext_resource type="Texture2D" uid="uid://x1dj80mo56de" path="res://assets/dither-textures/cross_hatch-B.png" id="10_2y6mc"]
+[ext_resource type="Texture2D" uid="uid://btbyvrd1xs2kh" path="res://assets/dither-textures/cross_hatch-G.png" id="11_oilkb"]
 [ext_resource type="Shader" path="res://scenes/gameplay/shadow_hatching.gdshader" id="11_vcdlo"]
+[ext_resource type="Texture2D" uid="uid://bo1vtxlncdpl2" path="res://assets/dither-textures/cross_hatch-R.png" id="12_d5jnh"]
 [ext_resource type="Texture2D" uid="uid://b7vfcf4xs8ouh" path="res://assets/color-textures/1bit-monitor-glow-1x.png" id="14_ne521"]
 [ext_resource type="Shader" path="res://scenes/gameplay/dither_gradient.gdshader" id="15_c1hg0"]
 [ext_resource type="Texture2D" uid="uid://cxr47kdoh5rld" path="res://assets/dither-textures/LDR_LLL1_0.png" id="15_q0jpy"]
@@ -73,6 +76,13 @@ size = Vector2(2, 2)
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_napyh"]
 render_priority = 0
 shader = ExtResource("11_vcdlo")
+shader_parameter/uv_scaling = 15.0
+shader_parameter/u_contrast = 2.0
+shader_parameter/u_offset = 0.45
+shader_parameter/background_color = Color(1, 1, 1, 1)
+shader_parameter/HATCH_TEXTURE_R = ExtResource("12_d5jnh")
+shader_parameter/HATCH_TEXTURE_G = ExtResource("11_oilkb")
+shader_parameter/HATCH_TEXTURE_B = ExtResource("10_2y6mc")
 
 [sub_resource type="QuadMesh" id="QuadMesh_jaq1h"]
 material = SubResource("ShaderMaterial_napyh")
@@ -102,11 +112,19 @@ shader_parameter/NOISE_TEXTURE = ExtResource("8_d0fdh")
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_4hg55"]
 shader = ExtResource("15_c1hg0")
 shader_parameter/dither_size = 1.0
-shader_parameter/u_contrast = 1.0
-shader_parameter/u_offset = 0.0
+shader_parameter/u_contrast = 2.5
+shader_parameter/u_offset = 0.12
 shader_parameter/bit_depth = 5
 shader_parameter/dither_tex = ExtResource("15_q0jpy")
 shader_parameter/color_tex = ExtResource("14_ne521")
+
+[sub_resource type="LabelSettings" id="LabelSettings_15w22"]
+font_size = 18
+outline_size = 1
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 2
+shadow_color = Color(0, 0, 0, 1)
+shadow_offset = Vector2(2, 2)
 
 [node name="Gameplay" type="Node3D"]
 script = ExtResource("5")
@@ -170,7 +188,6 @@ size = 6.0
 
 [node name="DepthSobelShader" type="MeshInstance3D" parent="Shaders"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17.301)
-visible = false
 cast_shadow = 0
 extra_cull_margin = 16384.0
 mesh = SubResource("QuadMesh_8kkb1")
@@ -186,6 +203,7 @@ skeleton = NodePath("../..")
 
 [node name="CombinedSobelShader" type="MeshInstance3D" parent="Shaders"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6.28541)
+visible = false
 cast_shadow = 0
 extra_cull_margin = 16384.0
 mesh = SubResource("QuadMesh_jmv7u")
@@ -212,6 +230,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="DitherGradientShaderLayer" type="CanvasLayer" parent="Shaders"]
+visible = false
 
 [node name="DitherGradientShader" type="ColorRect" parent="Shaders/DitherGradientShaderLayer"]
 material = SubResource("ShaderMaterial_4hg55")
@@ -237,6 +256,12 @@ theme_override_constants/margin_bottom = 15
 [node name="VBoxContainer" type="VBoxContainer" parent="UI/PanelContainer/MarginContainer"]
 layout_mode = 2
 
+[node name="SpatialLabel" type="Label" parent="UI/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Spatial Shaders"
+label_settings = SubResource("LabelSettings_15w22")
+horizontal_alignment = 1
+
 [node name="NoShaderSelector" type="CheckButton" parent="UI/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 button_group = ExtResource("7_siv8a")
@@ -258,6 +283,25 @@ layout_mode = 2
 button_group = ExtResource("7_siv8a")
 text = "Combined Sobel Shader"
 
+[node name="CrossHatchShader" type="CheckButton" parent="UI/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+button_group = ExtResource("7_siv8a")
+text = "Cross Hatch Shader"
+
+[node name="Spacer" type="Control" parent="UI/PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
+
+[node name="CanvasLayerLabel" type="Label" parent="UI/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Canvas Layer Shaders"
+label_settings = SubResource("LabelSettings_15w22")
+horizontal_alignment = 1
+
+[node name="DitherGradientShader" type="CheckButton" parent="UI/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Dither Gradient Shader"
+
 [node name="NoiseOverlaySpatialShader" type="CheckButton" parent="UI/PanelContainer/MarginContainer/VBoxContainer"]
 visible = false
 layout_mode = 2
@@ -268,6 +312,10 @@ Spatial Shader"
 [node name="NoiseOverlayCanvasShader" type="CheckButton" parent="UI/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Noise Overlay Shader"
+
+[node name="Spacer2" type="Control" parent="UI/PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="UI/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -298,6 +346,8 @@ horizontal_alignment = 1
 [connection signal="toggled" from="UI/PanelContainer/MarginContainer/VBoxContainer/DepthSobelShaderSelector" to="." method="_on_depth_sobel_shader_selector_toggled"]
 [connection signal="toggled" from="UI/PanelContainer/MarginContainer/VBoxContainer/NormalSobelShaderSelector" to="." method="_on_normal_sobel_shader_selector_toggled"]
 [connection signal="toggled" from="UI/PanelContainer/MarginContainer/VBoxContainer/CombinedSobelShader" to="." method="_on_combined_sobel_shader_toggled"]
+[connection signal="toggled" from="UI/PanelContainer/MarginContainer/VBoxContainer/CrossHatchShader" to="." method="_on_cross_hatch_shader_toggled"]
+[connection signal="toggled" from="UI/PanelContainer/MarginContainer/VBoxContainer/DitherGradientShader" to="." method="_on_dither_gradient_shader_toggled"]
 [connection signal="toggled" from="UI/PanelContainer/MarginContainer/VBoxContainer/NoiseOverlaySpatialShader" to="." method="_on_noise_overlay_spatial_shader_toggled"]
 [connection signal="toggled" from="UI/PanelContainer/MarginContainer/VBoxContainer/NoiseOverlayCanvasShader" to="." method="_on_noise_overlay_canvas_shader_toggled"]
 [connection signal="item_selected" from="UI/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/CameraOptionButton" to="." method="_on_camera_option_button_item_selected"]
