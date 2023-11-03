@@ -342,6 +342,166 @@ layout_mode = 2
 text = "Press U to show/hide UI"
 horizontal_alignment = 1
 
+[node name="VBoxContainer" type="VBoxContainer" parent="UI"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -30.0
+offset_bottom = 30.0
+grow_horizontal = 0
+
+[node name="CrossHatchPanel" type="PanelContainer" parent="UI/VBoxContainer"]
+visible = false
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/VBoxContainer/CrossHatchPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/VBoxContainer/CrossHatchPanel/MarginContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/VBoxContainer/CrossHatchPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_right = 50
+
+[node name="CrossHatchLabel" type="Label" parent="UI/VBoxContainer/CrossHatchPanel/MarginContainer/VBoxContainer/MarginContainer"]
+layout_mode = 2
+text = "Cross Hatch Options"
+label_settings = SubResource("LabelSettings_15w22")
+horizontal_alignment = 1
+
+[node name="ScaleHBoxContainer" type="HBoxContainer" parent="UI/VBoxContainer/CrossHatchPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ScaleLabel" type="Label" parent="UI/VBoxContainer/CrossHatchPanel/MarginContainer/VBoxContainer/ScaleHBoxContainer"]
+layout_mode = 2
+text = "Scale"
+
+[node name="ScaleHSlider" type="HSlider" parent="UI/VBoxContainer/CrossHatchPanel/MarginContainer/VBoxContainer/ScaleHBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 50.0
+value = 10.0
+
+[node name="ContrastHBoxContainer" type="HBoxContainer" parent="UI/VBoxContainer/CrossHatchPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ContrastLabel" type="Label" parent="UI/VBoxContainer/CrossHatchPanel/MarginContainer/VBoxContainer/ContrastHBoxContainer"]
+layout_mode = 2
+text = "Contrast"
+
+[node name="ContrastHSlider" type="HSlider" parent="UI/VBoxContainer/CrossHatchPanel/MarginContainer/VBoxContainer/ContrastHBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 5.0
+step = 0.1
+value = 1.0
+
+[node name="BrightnessHBoxContainer" type="HBoxContainer" parent="UI/VBoxContainer/CrossHatchPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="BrightnessLabel" type="Label" parent="UI/VBoxContainer/CrossHatchPanel/MarginContainer/VBoxContainer/BrightnessHBoxContainer"]
+layout_mode = 2
+text = "Brightness"
+
+[node name="BrightnessHSlider" type="HSlider" parent="UI/VBoxContainer/CrossHatchPanel/MarginContainer/VBoxContainer/BrightnessHBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.01
+
+[node name="DitherPanel" type="PanelContainer" parent="UI/VBoxContainer"]
+visible = false
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/VBoxContainer/DitherPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/VBoxContainer/DitherPanel/MarginContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/VBoxContainer/DitherPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_right = 50
+
+[node name="DitherLabel" type="Label" parent="UI/VBoxContainer/DitherPanel/MarginContainer/VBoxContainer/MarginContainer"]
+layout_mode = 2
+text = "Dither Options"
+label_settings = SubResource("LabelSettings_15w22")
+horizontal_alignment = 1
+
+[node name="SizeHBoxContainer" type="HBoxContainer" parent="UI/VBoxContainer/DitherPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="SizeLabel" type="Label" parent="UI/VBoxContainer/DitherPanel/MarginContainer/VBoxContainer/SizeHBoxContainer"]
+layout_mode = 2
+text = "Size"
+
+[node name="SizeHSlider" type="HSlider" parent="UI/VBoxContainer/DitherPanel/MarginContainer/VBoxContainer/SizeHBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = 0.5
+max_value = 10.0
+step = 0.5
+value = 1.0
+
+[node name="ContrastHBoxContainer" type="HBoxContainer" parent="UI/VBoxContainer/DitherPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ContrastLabel" type="Label" parent="UI/VBoxContainer/DitherPanel/MarginContainer/VBoxContainer/ContrastHBoxContainer"]
+layout_mode = 2
+text = "Contrast"
+
+[node name="ContrastHSlider" type="HSlider" parent="UI/VBoxContainer/DitherPanel/MarginContainer/VBoxContainer/ContrastHBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 5.0
+step = 0.1
+value = 1.0
+
+[node name="BrightnessHBoxContainer" type="HBoxContainer" parent="UI/VBoxContainer/DitherPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="BrightnessLabel" type="Label" parent="UI/VBoxContainer/DitherPanel/MarginContainer/VBoxContainer/BrightnessHBoxContainer"]
+layout_mode = 2
+text = "Brightness"
+
+[node name="BrightnessHSlider" type="HSlider" parent="UI/VBoxContainer/DitherPanel/MarginContainer/VBoxContainer/BrightnessHBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.01
+
+[node name="BitDepthHBoxContainer2" type="HBoxContainer" parent="UI/VBoxContainer/DitherPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="BitDepthLabel" type="Label" parent="UI/VBoxContainer/DitherPanel/MarginContainer/VBoxContainer/BitDepthHBoxContainer2"]
+layout_mode = 2
+text = "Bit Depth"
+
+[node name="BitDepthHSlider" type="HSlider" parent="UI/VBoxContainer/DitherPanel/MarginContainer/VBoxContainer/BitDepthHBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 20.0
+value = 5.0
+
 [connection signal="toggled" from="UI/PanelContainer/MarginContainer/VBoxContainer/NoShaderSelector" to="." method="_on_no_shader_selector_toggled"]
 [connection signal="toggled" from="UI/PanelContainer/MarginContainer/VBoxContainer/DepthSobelShaderSelector" to="." method="_on_depth_sobel_shader_selector_toggled"]
 [connection signal="toggled" from="UI/PanelContainer/MarginContainer/VBoxContainer/NormalSobelShaderSelector" to="." method="_on_normal_sobel_shader_selector_toggled"]
@@ -352,5 +512,19 @@ horizontal_alignment = 1
 [connection signal="toggled" from="UI/PanelContainer/MarginContainer/VBoxContainer/NoiseOverlayCanvasShader" to="." method="_on_noise_overlay_canvas_shader_toggled"]
 [connection signal="item_selected" from="UI/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/CameraOptionButton" to="." method="_on_camera_option_button_item_selected"]
 [connection signal="pressed" from="UI/PanelContainer/MarginContainer/VBoxContainer/ReloadScene" to="." method="_on_restart_scene_pressed"]
+[connection signal="drag_ended" from="UI/VBoxContainer/CrossHatchPanel/MarginContainer/VBoxContainer/ScaleHBoxContainer/ScaleHSlider" to="." method="_on_scale_h_slider_drag_ended"]
+[connection signal="value_changed" from="UI/VBoxContainer/CrossHatchPanel/MarginContainer/VBoxContainer/ScaleHBoxContainer/ScaleHSlider" to="." method="_on_scale_h_slider_value_changed"]
+[connection signal="drag_ended" from="UI/VBoxContainer/CrossHatchPanel/MarginContainer/VBoxContainer/ContrastHBoxContainer/ContrastHSlider" to="." method="_on_contrast_h_slider_drag_ended"]
+[connection signal="value_changed" from="UI/VBoxContainer/CrossHatchPanel/MarginContainer/VBoxContainer/ContrastHBoxContainer/ContrastHSlider" to="." method="_on_contrast_h_slider_value_changed"]
+[connection signal="drag_ended" from="UI/VBoxContainer/CrossHatchPanel/MarginContainer/VBoxContainer/BrightnessHBoxContainer/BrightnessHSlider" to="." method="_on_brightness_h_slider_drag_ended"]
+[connection signal="value_changed" from="UI/VBoxContainer/CrossHatchPanel/MarginContainer/VBoxContainer/BrightnessHBoxContainer/BrightnessHSlider" to="." method="_on_brightness_h_slider_value_changed"]
+[connection signal="drag_ended" from="UI/VBoxContainer/DitherPanel/MarginContainer/VBoxContainer/SizeHBoxContainer/SizeHSlider" to="." method="_on_size_h_slider_drag_ended"]
+[connection signal="value_changed" from="UI/VBoxContainer/DitherPanel/MarginContainer/VBoxContainer/SizeHBoxContainer/SizeHSlider" to="." method="_on_size_h_slider_value_changed"]
+[connection signal="drag_ended" from="UI/VBoxContainer/DitherPanel/MarginContainer/VBoxContainer/ContrastHBoxContainer/ContrastHSlider" to="." method="_on_dither_contrast_h_slider_drag_ended"]
+[connection signal="value_changed" from="UI/VBoxContainer/DitherPanel/MarginContainer/VBoxContainer/ContrastHBoxContainer/ContrastHSlider" to="." method="_on_dither_contrast_h_slider_value_changed"]
+[connection signal="drag_ended" from="UI/VBoxContainer/DitherPanel/MarginContainer/VBoxContainer/BrightnessHBoxContainer/BrightnessHSlider" to="." method="_on_dither_brightness_h_slider_drag_ended"]
+[connection signal="value_changed" from="UI/VBoxContainer/DitherPanel/MarginContainer/VBoxContainer/BrightnessHBoxContainer/BrightnessHSlider" to="." method="_on_dither_brightness_h_slider_value_changed"]
+[connection signal="drag_ended" from="UI/VBoxContainer/DitherPanel/MarginContainer/VBoxContainer/BitDepthHBoxContainer2/BitDepthHSlider" to="." method="_on_bit_depth_h_slider_drag_ended"]
+[connection signal="value_changed" from="UI/VBoxContainer/DitherPanel/MarginContainer/VBoxContainer/BitDepthHBoxContainer2/BitDepthHSlider" to="." method="_on_bit_depth_h_slider_value_changed"]
 
 [editable path="PauseLayer"]
