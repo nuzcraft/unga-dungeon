@@ -1,9 +1,10 @@
-[gd_scene load_steps=24 format=3 uid="uid://dc7dwo57b8a4a"]
+[gd_scene load_steps=36 format=3 uid="uid://dc7dwo57b8a4a"]
 
 [ext_resource type="PackedScene" uid="uid://barl4q1kugrmm" path="res://scenes/gameplay/pause-layer/pause-layer.tscn" id="2"]
 [ext_resource type="MeshLibrary" uid="uid://bm778vhamx7bl" path="res://assets/meshlibraries/tilemesh.meshlib" id="2_xhaqi"]
 [ext_resource type="PackedScene" uid="uid://y20neyo1q3yh" path="res://scenes/player/player.tscn" id="3_urib0"]
 [ext_resource type="Script" path="res://scenes/gameplay/gameplay.gd" id="5"]
+[ext_resource type="Texture2D" uid="uid://gwhij3eha8ge" path="res://assets/001_iso_dungeon.png" id="5_3d03j"]
 [ext_resource type="Shader" path="res://scenes/gameplay/depth-based-edge-detection.gdshader" id="5_4g314"]
 [ext_resource type="Shader" path="res://scenes/gameplay/normal-based-edge-detection.gdshader.gdshader" id="6_5kpi6"]
 [ext_resource type="Shader" path="res://scenes/gameplay/combined_edge_detection.gdshader" id="7_7ydwy"]
@@ -11,6 +12,13 @@
 [ext_resource type="ButtonGroup" uid="uid://c5gisxvhyko7o" path="res://shader_button_group.tres" id="7_siv8a"]
 [ext_resource type="Shader" path="res://scenes/gameplay/noise-overlay.gdshader" id="7_vcbxo"]
 [ext_resource type="Texture2D" uid="uid://bj4qxkfo15kpe" path="res://assets/blue_noise.png" id="8_d0fdh"]
+[ext_resource type="Texture2D" uid="uid://x1dj80mo56de" path="res://assets/dither-textures/cross_hatch-B.png" id="10_2y6mc"]
+[ext_resource type="Texture2D" uid="uid://btbyvrd1xs2kh" path="res://assets/dither-textures/cross_hatch-G.png" id="11_oilkb"]
+[ext_resource type="Shader" path="res://scenes/gameplay/shadow_hatching.gdshader" id="11_vcdlo"]
+[ext_resource type="Texture2D" uid="uid://bo1vtxlncdpl2" path="res://assets/dither-textures/cross_hatch-R.png" id="12_d5jnh"]
+[ext_resource type="Texture2D" uid="uid://b7vfcf4xs8ouh" path="res://assets/color-textures/1bit-monitor-glow-1x.png" id="14_ne521"]
+[ext_resource type="Shader" path="res://scenes/gameplay/dither_gradient.gdshader" id="15_c1hg0"]
+[ext_resource type="Texture2D" uid="uid://cxr47kdoh5rld" path="res://assets/dither-textures/LDR_LLL1_0.png" id="15_q0jpy"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_oi55u"]
 sky_top_color = Color(0.384314, 0.454902, 0.54902, 1)
@@ -65,6 +73,22 @@ material = SubResource("ShaderMaterial_c7ral")
 flip_faces = true
 size = Vector2(2, 2)
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_napyh"]
+render_priority = 0
+shader = ExtResource("11_vcdlo")
+shader_parameter/uv_scaling = 15.0
+shader_parameter/u_contrast = 2.0
+shader_parameter/u_offset = 0.45
+shader_parameter/background_color = Color(1, 1, 1, 1)
+shader_parameter/HATCH_TEXTURE_R = ExtResource("12_d5jnh")
+shader_parameter/HATCH_TEXTURE_G = ExtResource("11_oilkb")
+shader_parameter/HATCH_TEXTURE_B = ExtResource("10_2y6mc")
+
+[sub_resource type="QuadMesh" id="QuadMesh_jaq1h"]
+material = SubResource("ShaderMaterial_napyh")
+flip_faces = true
+size = Vector2(2, 2)
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_wfc7k"]
 render_priority = 0
 shader = ExtResource("7_jlsjr")
@@ -84,6 +108,23 @@ shader_parameter/uv_scaling = 0.3
 shader_parameter/movement_direction = Vector2(-0.25, 0.25)
 shader_parameter/movement_speed = 0.01
 shader_parameter/NOISE_TEXTURE = ExtResource("8_d0fdh")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4hg55"]
+shader = ExtResource("15_c1hg0")
+shader_parameter/dither_size = 1.0
+shader_parameter/u_contrast = 2.5
+shader_parameter/u_offset = 0.12
+shader_parameter/bit_depth = 5
+shader_parameter/dither_tex = ExtResource("15_q0jpy")
+shader_parameter/color_tex = ExtResource("14_ne521")
+
+[sub_resource type="LabelSettings" id="LabelSettings_15w22"]
+font_size = 18
+outline_size = 1
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 2
+shadow_color = Color(0, 0, 0, 1)
+shadow_offset = Vector2(2, 2)
 
 [node name="Gameplay" type="Node3D"]
 script = ExtResource("5")
@@ -124,6 +165,16 @@ visible = false
 [node name="PauseButton" parent="PauseLayer" index="1"]
 visible = false
 
+[node name="TextureRect" type="TextureRect" parent="PauseLayer"]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_3d03j")
+expand_mode = 2
+
 [node name="IsoCamera" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 5, 6)
 current = true
@@ -157,6 +208,12 @@ cast_shadow = 0
 extra_cull_margin = 16384.0
 mesh = SubResource("QuadMesh_jmv7u")
 
+[node name="ShadowHatchShader" type="MeshInstance3D" parent="Shaders"]
+visible = false
+cast_shadow = 0
+extra_cull_margin = 16384.0
+mesh = SubResource("QuadMesh_jaq1h")
+
 [node name="NoiseOverlayShader" type="MeshInstance3D" parent="Shaders"]
 visible = false
 mesh = SubResource("QuadMesh_u1pn0")
@@ -166,6 +223,17 @@ visible = false
 
 [node name="NoiseOverlayShader" type="ColorRect" parent="Shaders/NoiseOverlayShaderLayer"]
 material = SubResource("ShaderMaterial_p4oe8")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DitherGradientShaderLayer" type="CanvasLayer" parent="Shaders"]
+visible = false
+
+[node name="DitherGradientShader" type="ColorRect" parent="Shaders/DitherGradientShaderLayer"]
+material = SubResource("ShaderMaterial_4hg55")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -188,6 +256,12 @@ theme_override_constants/margin_bottom = 15
 [node name="VBoxContainer" type="VBoxContainer" parent="UI/PanelContainer/MarginContainer"]
 layout_mode = 2
 
+[node name="SpatialLabel" type="Label" parent="UI/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Spatial Shaders"
+label_settings = SubResource("LabelSettings_15w22")
+horizontal_alignment = 1
+
 [node name="NoShaderSelector" type="CheckButton" parent="UI/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 button_group = ExtResource("7_siv8a")
@@ -209,6 +283,25 @@ layout_mode = 2
 button_group = ExtResource("7_siv8a")
 text = "Combined Sobel Shader"
 
+[node name="CrossHatchShader" type="CheckButton" parent="UI/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+button_group = ExtResource("7_siv8a")
+text = "Cross Hatch Shader"
+
+[node name="Spacer" type="Control" parent="UI/PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
+
+[node name="CanvasLayerLabel" type="Label" parent="UI/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Canvas Layer Shaders"
+label_settings = SubResource("LabelSettings_15w22")
+horizontal_alignment = 1
+
+[node name="DitherGradientShader" type="CheckButton" parent="UI/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Dither Gradient Shader"
+
 [node name="NoiseOverlaySpatialShader" type="CheckButton" parent="UI/PanelContainer/MarginContainer/VBoxContainer"]
 visible = false
 layout_mode = 2
@@ -219,6 +312,10 @@ Spatial Shader"
 [node name="NoiseOverlayCanvasShader" type="CheckButton" parent="UI/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Noise Overlay Shader"
+
+[node name="Spacer2" type="Control" parent="UI/PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="UI/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -245,13 +342,189 @@ layout_mode = 2
 text = "Press U to show/hide UI"
 horizontal_alignment = 1
 
+[node name="VBoxContainer" type="VBoxContainer" parent="UI"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -30.0
+offset_bottom = 30.0
+grow_horizontal = 0
+
+[node name="CrossHatchPanel" type="PanelContainer" parent="UI/VBoxContainer"]
+visible = false
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/VBoxContainer/CrossHatchPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/VBoxContainer/CrossHatchPanel/MarginContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/VBoxContainer/CrossHatchPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_right = 50
+
+[node name="CrossHatchLabel" type="Label" parent="UI/VBoxContainer/CrossHatchPanel/MarginContainer/VBoxContainer/MarginContainer"]
+layout_mode = 2
+text = "Cross Hatch Options"
+label_settings = SubResource("LabelSettings_15w22")
+horizontal_alignment = 1
+
+[node name="ScaleHBoxContainer" type="HBoxContainer" parent="UI/VBoxContainer/CrossHatchPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ScaleLabel" type="Label" parent="UI/VBoxContainer/CrossHatchPanel/MarginContainer/VBoxContainer/ScaleHBoxContainer"]
+layout_mode = 2
+text = "Scale"
+
+[node name="ScaleHSlider" type="HSlider" parent="UI/VBoxContainer/CrossHatchPanel/MarginContainer/VBoxContainer/ScaleHBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 50.0
+value = 10.0
+
+[node name="ContrastHBoxContainer" type="HBoxContainer" parent="UI/VBoxContainer/CrossHatchPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ContrastLabel" type="Label" parent="UI/VBoxContainer/CrossHatchPanel/MarginContainer/VBoxContainer/ContrastHBoxContainer"]
+layout_mode = 2
+text = "Contrast"
+
+[node name="ContrastHSlider" type="HSlider" parent="UI/VBoxContainer/CrossHatchPanel/MarginContainer/VBoxContainer/ContrastHBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 5.0
+step = 0.1
+value = 1.0
+
+[node name="BrightnessHBoxContainer" type="HBoxContainer" parent="UI/VBoxContainer/CrossHatchPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="BrightnessLabel" type="Label" parent="UI/VBoxContainer/CrossHatchPanel/MarginContainer/VBoxContainer/BrightnessHBoxContainer"]
+layout_mode = 2
+text = "Brightness"
+
+[node name="BrightnessHSlider" type="HSlider" parent="UI/VBoxContainer/CrossHatchPanel/MarginContainer/VBoxContainer/BrightnessHBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.01
+
+[node name="DitherPanel" type="PanelContainer" parent="UI/VBoxContainer"]
+visible = false
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/VBoxContainer/DitherPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/VBoxContainer/DitherPanel/MarginContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/VBoxContainer/DitherPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_right = 50
+
+[node name="DitherLabel" type="Label" parent="UI/VBoxContainer/DitherPanel/MarginContainer/VBoxContainer/MarginContainer"]
+layout_mode = 2
+text = "Dither Options"
+label_settings = SubResource("LabelSettings_15w22")
+horizontal_alignment = 1
+
+[node name="SizeHBoxContainer" type="HBoxContainer" parent="UI/VBoxContainer/DitherPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="SizeLabel" type="Label" parent="UI/VBoxContainer/DitherPanel/MarginContainer/VBoxContainer/SizeHBoxContainer"]
+layout_mode = 2
+text = "Size"
+
+[node name="SizeHSlider" type="HSlider" parent="UI/VBoxContainer/DitherPanel/MarginContainer/VBoxContainer/SizeHBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = 0.5
+max_value = 10.0
+step = 0.5
+value = 1.0
+
+[node name="ContrastHBoxContainer" type="HBoxContainer" parent="UI/VBoxContainer/DitherPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ContrastLabel" type="Label" parent="UI/VBoxContainer/DitherPanel/MarginContainer/VBoxContainer/ContrastHBoxContainer"]
+layout_mode = 2
+text = "Contrast"
+
+[node name="ContrastHSlider" type="HSlider" parent="UI/VBoxContainer/DitherPanel/MarginContainer/VBoxContainer/ContrastHBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 5.0
+step = 0.1
+value = 1.0
+
+[node name="BrightnessHBoxContainer" type="HBoxContainer" parent="UI/VBoxContainer/DitherPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="BrightnessLabel" type="Label" parent="UI/VBoxContainer/DitherPanel/MarginContainer/VBoxContainer/BrightnessHBoxContainer"]
+layout_mode = 2
+text = "Brightness"
+
+[node name="BrightnessHSlider" type="HSlider" parent="UI/VBoxContainer/DitherPanel/MarginContainer/VBoxContainer/BrightnessHBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.01
+
+[node name="BitDepthHBoxContainer2" type="HBoxContainer" parent="UI/VBoxContainer/DitherPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="BitDepthLabel" type="Label" parent="UI/VBoxContainer/DitherPanel/MarginContainer/VBoxContainer/BitDepthHBoxContainer2"]
+layout_mode = 2
+text = "Bit Depth"
+
+[node name="BitDepthHSlider" type="HSlider" parent="UI/VBoxContainer/DitherPanel/MarginContainer/VBoxContainer/BitDepthHBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 20.0
+value = 5.0
+
 [connection signal="toggled" from="UI/PanelContainer/MarginContainer/VBoxContainer/NoShaderSelector" to="." method="_on_no_shader_selector_toggled"]
 [connection signal="toggled" from="UI/PanelContainer/MarginContainer/VBoxContainer/DepthSobelShaderSelector" to="." method="_on_depth_sobel_shader_selector_toggled"]
 [connection signal="toggled" from="UI/PanelContainer/MarginContainer/VBoxContainer/NormalSobelShaderSelector" to="." method="_on_normal_sobel_shader_selector_toggled"]
 [connection signal="toggled" from="UI/PanelContainer/MarginContainer/VBoxContainer/CombinedSobelShader" to="." method="_on_combined_sobel_shader_toggled"]
+[connection signal="toggled" from="UI/PanelContainer/MarginContainer/VBoxContainer/CrossHatchShader" to="." method="_on_cross_hatch_shader_toggled"]
+[connection signal="toggled" from="UI/PanelContainer/MarginContainer/VBoxContainer/DitherGradientShader" to="." method="_on_dither_gradient_shader_toggled"]
 [connection signal="toggled" from="UI/PanelContainer/MarginContainer/VBoxContainer/NoiseOverlaySpatialShader" to="." method="_on_noise_overlay_spatial_shader_toggled"]
 [connection signal="toggled" from="UI/PanelContainer/MarginContainer/VBoxContainer/NoiseOverlayCanvasShader" to="." method="_on_noise_overlay_canvas_shader_toggled"]
 [connection signal="item_selected" from="UI/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/CameraOptionButton" to="." method="_on_camera_option_button_item_selected"]
 [connection signal="pressed" from="UI/PanelContainer/MarginContainer/VBoxContainer/ReloadScene" to="." method="_on_restart_scene_pressed"]
+[connection signal="drag_ended" from="UI/VBoxContainer/CrossHatchPanel/MarginContainer/VBoxContainer/ScaleHBoxContainer/ScaleHSlider" to="." method="_on_scale_h_slider_drag_ended"]
+[connection signal="value_changed" from="UI/VBoxContainer/CrossHatchPanel/MarginContainer/VBoxContainer/ScaleHBoxContainer/ScaleHSlider" to="." method="_on_scale_h_slider_value_changed"]
+[connection signal="drag_ended" from="UI/VBoxContainer/CrossHatchPanel/MarginContainer/VBoxContainer/ContrastHBoxContainer/ContrastHSlider" to="." method="_on_contrast_h_slider_drag_ended"]
+[connection signal="value_changed" from="UI/VBoxContainer/CrossHatchPanel/MarginContainer/VBoxContainer/ContrastHBoxContainer/ContrastHSlider" to="." method="_on_contrast_h_slider_value_changed"]
+[connection signal="drag_ended" from="UI/VBoxContainer/CrossHatchPanel/MarginContainer/VBoxContainer/BrightnessHBoxContainer/BrightnessHSlider" to="." method="_on_brightness_h_slider_drag_ended"]
+[connection signal="value_changed" from="UI/VBoxContainer/CrossHatchPanel/MarginContainer/VBoxContainer/BrightnessHBoxContainer/BrightnessHSlider" to="." method="_on_brightness_h_slider_value_changed"]
+[connection signal="drag_ended" from="UI/VBoxContainer/DitherPanel/MarginContainer/VBoxContainer/SizeHBoxContainer/SizeHSlider" to="." method="_on_size_h_slider_drag_ended"]
+[connection signal="value_changed" from="UI/VBoxContainer/DitherPanel/MarginContainer/VBoxContainer/SizeHBoxContainer/SizeHSlider" to="." method="_on_size_h_slider_value_changed"]
+[connection signal="drag_ended" from="UI/VBoxContainer/DitherPanel/MarginContainer/VBoxContainer/ContrastHBoxContainer/ContrastHSlider" to="." method="_on_dither_contrast_h_slider_drag_ended"]
+[connection signal="value_changed" from="UI/VBoxContainer/DitherPanel/MarginContainer/VBoxContainer/ContrastHBoxContainer/ContrastHSlider" to="." method="_on_dither_contrast_h_slider_value_changed"]
+[connection signal="drag_ended" from="UI/VBoxContainer/DitherPanel/MarginContainer/VBoxContainer/BrightnessHBoxContainer/BrightnessHSlider" to="." method="_on_dither_brightness_h_slider_drag_ended"]
+[connection signal="value_changed" from="UI/VBoxContainer/DitherPanel/MarginContainer/VBoxContainer/BrightnessHBoxContainer/BrightnessHSlider" to="." method="_on_dither_brightness_h_slider_value_changed"]
+[connection signal="drag_ended" from="UI/VBoxContainer/DitherPanel/MarginContainer/VBoxContainer/BitDepthHBoxContainer2/BitDepthHSlider" to="." method="_on_bit_depth_h_slider_drag_ended"]
+[connection signal="value_changed" from="UI/VBoxContainer/DitherPanel/MarginContainer/VBoxContainer/BitDepthHBoxContainer2/BitDepthHSlider" to="." method="_on_bit_depth_h_slider_value_changed"]
 
 [editable path="PauseLayer"]
