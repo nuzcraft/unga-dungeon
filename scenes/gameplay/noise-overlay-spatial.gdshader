@@ -7,7 +7,7 @@ uniform float strength: hint_range(0.0, 5, 0.1) = 1.0;
 uniform float uv_scaling: hint_range (0.0, 1.0, 0.05) = 1.0;
 
 void vertex(){
-	POSITION = vec4(VERTEX, 1.0);
+	POSITION = vec4(VERTEX.xy, 1.0, 1.0);
 }
 
 void fragment() {

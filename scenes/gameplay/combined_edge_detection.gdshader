@@ -25,7 +25,7 @@ const mat3 sobel_x = mat3(
 
 float linearize_depth(vec2 uv_coord, mat4 proj_matrix){
 	float depth = texture(DEPTH_TEXTURE, uv_coord).x;
-	vec3 ndc = vec3(uv_coord, depth) * 2.0 - 1.0;
+	vec3 ndc = vec3(uv_coord, depth) * 2.0 - 0.0;
 	vec4 view = proj_matrix * vec4(ndc, 1.0);
 	view.xyz /= view.w;
 	float linear_depth = -view.z;
@@ -37,17 +37,17 @@ vec3 normalize_normal(vec3 normal){
 }
 
 void vertex(){
-	POSITION = vec4(VERTEX, 1.0);
+	POSITION = vec4(VERTEX.xy, 1.0, 1.0);
 }
 
 void fragment() {
 	vec2 uv = SCREEN_UV;
 	vec4 screen_color = texture(SCREEN_TEXTURE, uv);
 	vec2 screen_pixel_size = 0.5 / VIEWPORT_SIZE;
-	
+
 	// depth section
 	float depth = linearize_depth(uv, INV_PROJECTION_MATRIX);
-	
+
 	float n = linearize_depth(uv + vec2(0.0, -screen_pixel_size.y), INV_PROJECTION_MATRIX);
 	float s = linearize_depth(uv + vec2(0.0, screen_pixel_size.y), INV_PROJECTION_MATRIX);
 	float e = linearize_depth(uv + vec2(screen_pixel_size.x, 0.0), INV_PROJECTION_MATRIX);
@@ -56,21 +56,21 @@ void fragment() {
 	float ne = linearize_depth(uv + vec2(screen_pixel_size.x, -screen_pixel_size.y), INV_PROJECTION_MATRIX);
 	float sw = linearize_depth(uv + vec2(-screen_pixel_size.x, screen_pixel_size.y), INV_PROJECTION_MATRIX);
 	float se = linearize_depth(uv + vec2(screen_pixel_size.x, screen_pixel_size.y), INV_PROJECTION_MATRIX);
-	
+
 	mat3 depth_surrounding_pixels = mat3(
 		vec3(nw, n, ne),
 		vec3(w, depth, e),
 		vec3(sw, s, se)
 	);
-	
+
 	float depth_edge_x = dot(sobel_x[0], depth_surrounding_pixels[0]) + dot(sobel_x[1], depth_surrounding_pixels[1]) + dot(sobel_x[2], depth_surrounding_pixels[2]);
 	float depth_edge_y = dot(sobel_y[0], depth_surrounding_pixels[0]) + dot(sobel_y[1], depth_surrounding_pixels[1]) + dot(sobel_y[2], depth_surrounding_pixels[2]);
-	
+
 	float depth_edge = sqrt(pow(depth_edge_x, 2.0)+pow(depth_edge_y, 2.0));
-	
+
 	// normal section
 	vec3 normal = normalize_normal(texture(NORMAL_TEXTURE, uv).rgb);
-	
+
 	vec3 n_n = normalize_normal(texture(NORMAL_TEXTURE, uv + vec2(0.0, -screen_pixel_size.y)).rgb);
 	vec3 n_s = normalize_normal(texture(NORMAL_TEXTURE, uv + vec2(0.0, screen_pixel_size.y)).rgb);
 	vec3 n_e = normalize_normal(texture(NORMAL_TEXTURE, uv + vec2(screen_pixel_size.x, 0.0)).rgb);
@@ -79,18 +79,18 @@ void fragment() {
 	vec3 n_ne = normalize_normal(texture(NORMAL_TEXTURE, uv + vec2(screen_pixel_size.x, -screen_pixel_size.y)).rgb);
 	vec3 n_sw = normalize_normal(texture(NORMAL_TEXTURE, uv + vec2(-screen_pixel_size.x, screen_pixel_size.y)).rgb);
 	vec3 n_se = normalize_normal(texture(NORMAL_TEXTURE, uv + vec2(screen_pixel_size.x, screen_pixel_size.y)).rgb);
-	
+
 	mat3 normal_surrounding_pixels = mat3(
 		vec3(length(n_nw-normal), length(n_n-normal), length(n_ne-normal)),
 		vec3(length(n_w-normal), length(normal-normal), length(n_e-normal)),
 		vec3(length(n_sw-normal), length(n_s-normal), length(n_se-normal))
 	);
-	
+
 	float normal_edge_x = dot(sobel_x[0], normal_surrounding_pixels[0]) + dot(sobel_x[1], normal_surrounding_pixels[1]) + dot(sobel_x[2], normal_surrounding_pixels[2]);
 	float normal_edge_y = dot(sobel_y[0], normal_surrounding_pixels[0]) + dot(sobel_y[1], normal_surrounding_pixels[1]) + dot(sobel_y[2], normal_surrounding_pixels[2]);
-	
+
 	float normal_edge = sqrt(pow(normal_edge_x, 2.0)+pow(normal_edge_y, 2.0));
-	
+
 	if (normal_edge > normal_edge_threshold) {
 		ALBEDO = line_color;
 	} else if (depth_edge > depth_edge_threshold_lower && normal_edge > 0.0) {
